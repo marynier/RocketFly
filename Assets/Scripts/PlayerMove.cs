@@ -9,16 +9,22 @@ public class PlayerMove : MonoBehaviour
 
     public float MaxPullDistance = 3f;
     public float MaxSpeed = 10f;
+    public float RotationSpeed = 5f;
     public LineRenderer TrajectoryLine;
+    public bool AutoLaunchOnStart = true;
+    public float InitialLaunchPower = 5f;
 
     private Vector3 _startMousePos;
     private Vector3 _currentMousePos;
     private bool _isAiming = false;
+    private bool _isLaunched = false;
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private Camera _mainCamera;
+
     [SerializeField] private ScoreManager _scoreManager;
-    [SerializeField] private float _fuelConsumption = 5f;
-    private float _fuelReserve = 100f;
+    [SerializeField] private float _fuelConsumption = 5f; //Расход топлива
+    private float _fuelReserve = 100f; //Остаток топлива
+    private float _maxFuel = 100f;
     [SerializeField] private Image _fuelImage;
     [SerializeField] private TMP_Text _fuelText;
 
@@ -26,6 +32,12 @@ public class PlayerMove : MonoBehaviour
     {
         SetupTrajectoryLine();
         UpdateFuel();
+
+        // Автоматический запуск в начале игры
+        if (AutoLaunchOnStart)
+        {
+            AutoLaunch();
+        }
     }
 
     void Update()
@@ -34,7 +46,32 @@ public class PlayerMove : MonoBehaviour
 
         HandleInput();
         UpdateTrajectoryLine();
+
+        // Поворачиваем ракету в сторону движения, если она летит
+        if (_isLaunched && _rb.linearVelocity != Vector2.zero)
+        {
+            RotateTowardsVelocity();
+        }
     }
+    void AutoLaunch()
+    {
+        // Генерируем случайное направление
+        Vector2 randomDirection = new Vector2(Random.Range(0.5f, 1f), Random.Range(0.5f, 1f)).normalized;
+
+        // Создаем начальный импульс
+        Vector2 initialVelocity = randomDirection * InitialLaunchPower;
+        _rb.linearVelocity = initialVelocity;
+        _isLaunched = true;
+
+        // Поворачиваем ракету в направлении движения
+        if (initialVelocity != Vector2.zero)
+        {
+            RotateTowardsVelocity(true); // Мгновенный поворот для начального запуска
+        }
+
+        Debug.Log("Автоматический запуск ракеты! Направление: " + randomDirection + ", Скорость: " + InitialLaunchPower);
+    }
+
     void HandleInput()
     {
         // Начало прицеливания
@@ -50,6 +87,8 @@ public class PlayerMove : MonoBehaviour
         if (_isAiming && Input.GetMouseButton(0))
         {
             ContinueAiming();
+            // Поворачиваем ракету в сторону прицеливания во время натяжения
+            RotateTowardsAimDirection();
         }
 
         // Завершение прицеливания
@@ -73,6 +112,10 @@ public class PlayerMove : MonoBehaviour
         _isAiming = true;
         TrajectoryLine.enabled = true;
         Time.timeScale = 0.01f;
+
+        //// Останавливаем физику при прицеливании
+        //_rb.linearVelocity = Vector2.zero;
+        //_rb.angularVelocity = 0f;
     }
 
     void ContinueAiming()
@@ -90,8 +133,15 @@ public class PlayerMove : MonoBehaviour
         Vector2 launchVelocity = direction.normalized * (distance / MaxPullDistance) * MaxSpeed;
         _rb.linearVelocity = launchVelocity;
 
+        // Сразу поворачиваем в сторону движения
+        if (launchVelocity != Vector2.zero)
+        {
+            RotateTowardsVelocity();
+        }
+
         // Сбрасываем состояние
         _isAiming = false;
+        _isLaunched = true;
         TrajectoryLine.enabled = false;
         _fuelReserve -= _fuelConsumption;
         UpdateFuel();
@@ -100,6 +150,56 @@ public class PlayerMove : MonoBehaviour
     {
         _fuelImage.fillAmount = _fuelReserve / 100f;
         _fuelText.text = _fuelReserve.ToString("00.0");
+    }
+    public void FuelCharging(float value)
+    {
+        if (_fuelReserve < _maxFuel)
+        {
+            float possibleAdding = _maxFuel - _fuelReserve;
+            if (possibleAdding >= value)
+                _fuelReserve += value;
+            else
+                _fuelReserve += possibleAdding;
+
+            if(_fuelReserve > _maxFuel)
+                _fuelReserve = _maxFuel;
+
+            UpdateFuel();
+        }
+
+    }
+    void RotateTowardsAimDirection()
+    {
+        Vector3 direction = _startMousePos - _currentMousePos;
+        if (direction != Vector3.zero)
+        {
+            // Вычисляем угол поворота
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+            // Плавно поворачиваем ракету
+            Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, RotationSpeed * Time.deltaTime);
+        }
+    }
+
+    void RotateTowardsVelocity(bool instant = false)
+    {
+        if (_rb.linearVelocity != Vector2.zero)
+        {
+            // Вычисляем угол на основе вектора скорости
+            float angle = Mathf.Atan2(_rb.linearVelocity.y, _rb.linearVelocity.x) * Mathf.Rad2Deg;
+            if (instant)
+            {
+                // Мгновенный поворот
+                transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            }
+            else
+            {
+                // Плавно поворачиваем ракету
+                Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, RotationSpeed * Time.deltaTime);
+            }
+        }
     }
 
     void SetupTrajectoryLine()
