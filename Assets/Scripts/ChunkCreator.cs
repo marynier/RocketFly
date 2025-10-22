@@ -25,9 +25,12 @@ public class ChunkCreator : MonoBehaviour
 
     void Update()
     {
-        // Достроить вперёд
-        if (Vector3.Distance(_player.position, _lastEndPos) < _playerDistToSpawn)
-            SpawnNext();
+        if (_player)
+        {
+            // Достроить вперёд
+            if (Vector3.Distance(_player.position, _lastEndPos) < _playerDistToSpawn)
+                SpawnNext();
+        }        
 
         // Удалить/вернуть в пул лишние позади
         while (_active.Count > _maxActiveChunks)
