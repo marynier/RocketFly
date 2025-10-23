@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FuelCharge
   _fuelQuantity: 10
+  _valueText: {fileID: 4425305159978022410}
 --- !u!1 &1857120305762343683
 GameObject:
   m_ObjectHideFlags: 0
