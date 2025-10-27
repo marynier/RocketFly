@@ -27,6 +27,8 @@ public class PlayerMove : MonoBehaviour
     private float _maxFuel = 100f;
     [SerializeField] private Image _fuelImage;
     [SerializeField] private TMP_Text _fuelText;
+    [SerializeField] private Projection _projection;
+    private Vector2 _launchVelocity = Vector2.zero;
 
     void Start()
     {
@@ -38,6 +40,7 @@ public class PlayerMove : MonoBehaviour
         {
             AutoLaunch();
         }
+        _projection.gameObject.SetActive(false);
     }
 
     void Update()
@@ -94,7 +97,7 @@ public class PlayerMove : MonoBehaviour
         // «авершение прицеливани€
         if (_isAiming && Input.GetMouseButtonUp(0))
         {
-            ReleaseAndLaunch();
+            ReleaseAndLaunch(_launchVelocity);
         }
     }
     bool IsMouseOverRocket()
@@ -111,26 +114,35 @@ public class PlayerMove : MonoBehaviour
         _startMousePos = GetMouseWorldPos();
         _isAiming = true;
         TrajectoryLine.enabled = true;
-        Time.timeScale = 0.01f;
+        //Time.timeScale = 0.01f;
 
-        //// ќстанавливаем физику при прицеливании
-        //_rb.linearVelocity = Vector2.zero;
-        //_rb.angularVelocity = 0f;
+        // ќстанавливаем физику при прицеливании
+        _rb.bodyType = RigidbodyType2D.Kinematic;
+        _rb.linearVelocity = Vector2.zero;
+        _rb.angularVelocity = 0f;
+
+        
     }
 
     void ContinueAiming()
     {
         _currentMousePos = GetMouseWorldPos();
-    }
 
-    void ReleaseAndLaunch()
-    {
-        Time.timeScale = 1f;
         Vector3 direction = _startMousePos - _currentMousePos;
         float distance = Mathf.Min(direction.magnitude, MaxPullDistance);
 
         // Ќормализуем направление и устанавливаем скорость
-        Vector2 launchVelocity = direction.normalized * (distance / MaxPullDistance) * MaxSpeed;
+        _launchVelocity = direction.normalized * (distance / MaxPullDistance) * MaxSpeed;
+
+        
+        _projection.gameObject.SetActive(true);
+        //_projection.ResetAndLaunch(transform.position, _launchVelocity);
+    }
+
+    void ReleaseAndLaunch(Vector2 launchVelocity)
+    {
+        //Time.timeScale = 1f;
+        _rb.bodyType = RigidbodyType2D.Dynamic;
         _rb.linearVelocity = launchVelocity;
 
         // —разу поворачиваем в сторону движени€
@@ -145,6 +157,7 @@ public class PlayerMove : MonoBehaviour
         TrajectoryLine.enabled = false;
         _fuelReserve -= _fuelConsumption;
         UpdateFuel();
+        _projection.gameObject.SetActive(false);
     }
     private void UpdateFuel()
     {
@@ -161,7 +174,7 @@ public class PlayerMove : MonoBehaviour
             else
                 _fuelReserve += possibleAdding;
 
-            if(_fuelReserve > _maxFuel)
+            if (_fuelReserve > _maxFuel)
                 _fuelReserve = _maxFuel;
 
             UpdateFuel();
@@ -220,6 +233,7 @@ public class PlayerMove : MonoBehaviour
 
         TrajectoryLine.SetPosition(0, transform.position);
         TrajectoryLine.SetPosition(1, endPoint);
+        
     }
 
     Vector3 GetMouseWorldPos()
