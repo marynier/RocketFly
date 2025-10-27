@@ -27,7 +27,7 @@ public class PlayerMove : MonoBehaviour
     private float _maxFuel = 100f;
     [SerializeField] private Image _fuelImage;
     [SerializeField] private TMP_Text _fuelText;
-    [SerializeField] private Projection _projection;
+    [SerializeField] private Projection _projection;    
     private Vector2 _launchVelocity = Vector2.zero;
 
     void Start()
@@ -234,6 +234,10 @@ public class PlayerMove : MonoBehaviour
         TrajectoryLine.SetPosition(0, transform.position);
         TrajectoryLine.SetPosition(1, endPoint);
         
+        float width = (endPoint - transform.position).magnitude;
+        _projection.GetComponent<SpriteRenderer>().size = new Vector2(width*20, 7);
+
+
     }
 
     Vector3 GetMouseWorldPos()
