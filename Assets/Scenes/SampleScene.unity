@@ -288,9 +288,9 @@ Transform:
   m_GameObject: {fileID: 283312668}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.37, y: 0.235, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0.692, y: 0.353, z: 0}
+  m_LocalScale: {x: 0.15, y: 0.15, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1932923195}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1671,7 +1671,7 @@ Transform:
   m_GameObject: {fileID: 1020696472}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.915, y: 0.005, z: 0}
+  m_LocalPosition: {x: 1.421, y: 0.005, z: 0}
   m_LocalScale: {x: 0.0421714, y: 0.032644, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2709,7 +2709,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.025140643, y: 0.17018674}
+  m_Offset: {x: 0.23807418, y: 0.28518337}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2719,7 +2719,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.7851784, y: 1.020061}
+  m_Size: {x: 2.188944, y: 1.1478351}
   m_EdgeRadius: 0
 --- !u!1 &1954599122
 GameObject:
