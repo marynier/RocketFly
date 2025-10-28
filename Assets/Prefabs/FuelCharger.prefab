@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7114325306340870437}
   - component: {fileID: 1215228154083204665}
-  - component: {fileID: 8567936634471714593}
+  - component: {fileID: 655839458480893758}
   m_Layer: 0
-  m_Name: FuelCharge
+  m_Name: FuelCharger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,7 +80,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.3519616, y: 2.3779976}
   m_EdgeRadius: 0
---- !u!114 &8567936634471714593
+--- !u!114 &655839458480893758
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,9 +89,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 681310408399055114}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4eb252b3aca7ee843b46a956765725c8, type: 3}
+  m_Script: {fileID: 11500000, guid: 20e00c23052ce5948a5dbd41213475cd, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FuelCharge
+  m_EditorClassIdentifier: Assembly-CSharp::FuelCharger
   _fuelQuantity: 10
   _valueText: {fileID: 4425305159978022410}
 --- !u!1 &1857120305762343683

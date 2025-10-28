@@ -23,17 +23,15 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private ScoreManager _scoreManager;
     [SerializeField] private float _fuelConsumption = 5f; //Расход топлива
-    private float _fuelReserve = 100f; //Остаток топлива
-    private float _maxFuel = 100f;
-    [SerializeField] private Image _fuelImage;
-    [SerializeField] private TMP_Text _fuelText;
-    [SerializeField] private Projection _projection;    
+    [SerializeField] private FuelManager _fuelCharge;
+
+
+    [SerializeField] private Projection _projection;
     private Vector2 _launchVelocity = Vector2.zero;
 
     void Start()
     {
-        SetupTrajectoryLine();
-        UpdateFuel();
+        SetupTrajectoryLine();        
 
         // Автоматический запуск в начале игры
         if (AutoLaunchOnStart)
@@ -109,7 +107,7 @@ public class PlayerMove : MonoBehaviour
 
     void StartAiming()
     {
-        if (_fuelReserve < _fuelConsumption) return;
+        if (_fuelCharge._fuelReserve < _fuelConsumption) return;
 
         _startMousePos = GetMouseWorldPos();
         _isAiming = true;
@@ -121,7 +119,7 @@ public class PlayerMove : MonoBehaviour
         _rb.linearVelocity = Vector2.zero;
         _rb.angularVelocity = 0f;
 
-        
+
     }
 
     void ContinueAiming()
@@ -134,7 +132,7 @@ public class PlayerMove : MonoBehaviour
         // Нормализуем направление и устанавливаем скорость
         _launchVelocity = direction.normalized * (distance / MaxPullDistance) * MaxSpeed;
 
-        
+
         _projection.gameObject.SetActive(true);
         //_projection.ResetAndLaunch(transform.position, _launchVelocity);
     }
@@ -155,32 +153,11 @@ public class PlayerMove : MonoBehaviour
         _isAiming = false;
         _isLaunched = true;
         TrajectoryLine.enabled = false;
-        _fuelReserve -= _fuelConsumption;
-        UpdateFuel();
+        _fuelCharge._fuelReserve -= _fuelConsumption;
+        _fuelCharge.UpdateFuel();
         _projection.gameObject.SetActive(false);
     }
-    private void UpdateFuel()
-    {
-        _fuelImage.fillAmount = _fuelReserve / 100f;
-        _fuelText.text = _fuelReserve.ToString("00.0");
-    }
-    public void FuelCharging(float value)
-    {
-        if (_fuelReserve < _maxFuel)
-        {
-            float possibleAdding = _maxFuel - _fuelReserve;
-            if (possibleAdding >= value)
-                _fuelReserve += value;
-            else
-                _fuelReserve += possibleAdding;
 
-            if (_fuelReserve > _maxFuel)
-                _fuelReserve = _maxFuel;
-
-            UpdateFuel();
-        }
-
-    }
     void RotateTowardsAimDirection()
     {
         Vector3 direction = _startMousePos - _currentMousePos;
@@ -233,9 +210,9 @@ public class PlayerMove : MonoBehaviour
 
         TrajectoryLine.SetPosition(0, transform.position);
         TrajectoryLine.SetPosition(1, endPoint);
-        
+
         float width = (endPoint - transform.position).magnitude;
-        _projection.GetComponent<SpriteRenderer>().size = new Vector2(width*20, 7);
+        _projection.GetComponent<SpriteRenderer>().size = new Vector2(width * 20, 7);
 
 
     }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FuelCreator : MonoBehaviour
 {
-    [SerializeField] private FuelCharge _fuelPrefab;
+    [SerializeField] private FuelCharger _fuelPrefab;
     [SerializeField] private Transform[] _spawns;
     void Start()
     {

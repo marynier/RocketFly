@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dbffd5b97f81054f8a1d13c61f5290f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FuelCreator
-  _fuelPrefab: {fileID: 8567936634471714593, guid: 181b2428c9849d849bb56358933662a1, type: 3}
+  _fuelPrefab: {fileID: 655839458480893758, guid: 181b2428c9849d849bb56358933662a1, type: 3}
   _spawns:
   - {fileID: 6647395976212463954}
   - {fileID: 8304634863044440616}
