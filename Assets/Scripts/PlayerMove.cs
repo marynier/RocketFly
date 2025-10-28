@@ -22,7 +22,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private Camera _mainCamera;
 
     [SerializeField] private ScoreManager _scoreManager;
-    [SerializeField] private float _fuelConsumption = 5f; //Расход топлива
+    [SerializeField] private int _fuelConsumption = 5; //Расход топлива
     [SerializeField] private FuelManager _fuelCharge;
 
 
@@ -153,8 +153,7 @@ public class PlayerMove : MonoBehaviour
         _isAiming = false;
         _isLaunched = true;
         TrajectoryLine.enabled = false;
-        _fuelCharge._fuelReserve -= _fuelConsumption;
-        _fuelCharge.UpdateFuel();
+        _fuelCharge.FuelBurst(_fuelConsumption);
         _projection.gameObject.SetActive(false);
     }
 

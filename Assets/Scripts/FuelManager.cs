@@ -6,34 +6,49 @@ public class FuelManager : MonoBehaviour
 {
     [SerializeField] private Image _fuelImage;
     [SerializeField] private TMP_Text _fuelText;
-    public float _fuelReserve = 100f; //ќстаток топлива
-    private float _maxFuel = 100f;
+    public int _fuelReserve = 100; //ќстаток топлива
+    private int _maxFuel = 100;
+    
+    private float _currentFillAmount; // текущий fillAmount
+    private float _targetFillAmount;  // желаемый fillAmount
+    private float _lerpTime;          // врем€ интерпол€ции
+    private float _lerpDuration = 1f; // длительность плавного перехода в секундах
+
 
     private void Start()
     {
+        _currentFillAmount = 1f; // при старте топливо полное
+        _targetFillAmount = 1f;
+        _fuelImage.fillAmount = _currentFillAmount;
+        _fuelText.text = _fuelReserve.ToString("00");
+    }
+    private void Update()
+    {
+        if (_currentFillAmount != _targetFillAmount)
+        {
+            _lerpTime += Time.deltaTime;
+            float t = Mathf.Clamp01(_lerpTime / _lerpDuration);
+            _currentFillAmount = Mathf.Lerp(_currentFillAmount, _targetFillAmount, t);
+            _fuelImage.fillAmount = _currentFillAmount;
+        }
+    }
+    public void UpdateFuel()
+    {
+        _targetFillAmount = _fuelReserve / 100f;
+        _lerpTime = 0f; // сбрасываем таймер дл€ новой интерпол€ции
 
+        _fuelText.text = _fuelReserve.ToString("00");
+    }
+
+    public void FuelBurst(int value)
+    {
+        _fuelReserve = Mathf.Max(0, _fuelReserve - value);
         UpdateFuel();
     }
 
-    public void UpdateFuel()
+    public void FuelCharging(int value)
     {
-        _fuelImage.fillAmount = _fuelReserve / 100f;
-        _fuelText.text = _fuelReserve.ToString("00");
-    }
-    public void FuelCharging(float value)
-    {
-        if (_fuelReserve < _maxFuel)
-        {
-            float possibleAdding = _maxFuel - _fuelReserve;
-            if (possibleAdding >= value)
-                _fuelReserve += value;
-            else
-                _fuelReserve += possibleAdding;
-
-            if (_fuelReserve > _maxFuel)
-                _fuelReserve = _maxFuel;
-
-            UpdateFuel();
-        }
+        _fuelReserve = Mathf.Min(_maxFuel, _fuelReserve + value);
+        UpdateFuel();
     }
 }

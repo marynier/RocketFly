@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FuelCharger : MonoBehaviour
 {
-    [SerializeField] private float _fuelQuantity = 10f;
+    [SerializeField] private int _fuelQuantity = 10;
     [SerializeField] private TMP_Text _valueText;
     private FuelManager _fuelManager;
 
