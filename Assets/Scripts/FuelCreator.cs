@@ -7,7 +7,8 @@ public class FuelCreator : MonoBehaviour
     void Start()
     {
         int spawnIndex = Random.Range(0, _spawns.Length);
-        Instantiate(_fuelPrefab, _spawns[spawnIndex].position, Quaternion.identity);
+        FuelCharger newCharger = Instantiate(_fuelPrefab, _spawns[spawnIndex].position, Quaternion.identity);
+        newCharger.transform.parent = this.transform;
     }
 
 }

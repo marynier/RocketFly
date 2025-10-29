@@ -29,9 +29,13 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private Projection _projection;
     private Vector2 _launchVelocity = Vector2.zero;
 
+    [SerializeField] private SpriteRenderer _explosion;
+    [SerializeField] private SpriteRenderer[] _playerVisual;
+    
+
     void Start()
     {
-        SetupTrajectoryLine();        
+        SetupTrajectoryLine();
 
         // Автоматический запуск в начале игры
         if (AutoLaunchOnStart)
@@ -222,13 +226,25 @@ public class PlayerMove : MonoBehaviour
         mousePos.z = -_mainCamera.transform.position.z;
         return _mainCamera.ScreenToWorldPoint(mousePos);
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        _scoreManager.EndGame();
-        Die();
+        if (collision.GetComponent<FuelCharger>()) return;
+
+        _explosion.enabled = true;
+
+        foreach (var image in _playerVisual)
+        image.enabled = false;
+
+        _rb.linearVelocity = Vector2.zero;
+        _rb.bodyType = RigidbodyType2D.Static;
+
+        
+        Invoke(nameof(Die), 0.3f);
     }
     private void Die()
     {
+        _scoreManager.EndGame();
         Destroy(gameObject);
     }
+
 }

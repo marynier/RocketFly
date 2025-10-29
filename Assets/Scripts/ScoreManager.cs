@@ -31,9 +31,9 @@ public class ScoreManager : MonoBehaviour
     }
     private void UpdateText()
     {
-        _scoreText.text = _score.ToString("00.0");
-        _scoreTextLoseWindow.text = _score.ToString("00.0");
-        _recordScoreText.text = _saves.MaxDistance.ToString("00.0");
+        _scoreText.text = Formater.Format(_score);
+        _scoreTextLoseWindow.text = Formater.Format(_score);
+        _recordScoreText.text = Formater.Format(_saves.MaxDistance);
     }
     private void UpdateScore()
     {

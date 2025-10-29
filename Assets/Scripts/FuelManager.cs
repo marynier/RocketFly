@@ -8,11 +8,13 @@ public class FuelManager : MonoBehaviour
     [SerializeField] private TMP_Text _fuelText;
     public int _fuelReserve = 100; //Остаток топлива
     private int _maxFuel = 100;
-    
+
     private float _currentFillAmount; // текущий fillAmount
     private float _targetFillAmount;  // желаемый fillAmount
     private float _lerpTime;          // время интерполяции
     private float _lerpDuration = 1f; // длительность плавного перехода в секундах
+    private float _fuelDelay = 0.2f;
+    private float _timeWithoutCharging;
 
 
     private void Start()
@@ -24,6 +26,7 @@ public class FuelManager : MonoBehaviour
     }
     private void Update()
     {
+        _timeWithoutCharging += Time.deltaTime;
         if (_currentFillAmount != _targetFillAmount)
         {
             _lerpTime += Time.deltaTime;
@@ -48,7 +51,11 @@ public class FuelManager : MonoBehaviour
 
     public void FuelCharging(int value)
     {
-        _fuelReserve = Mathf.Min(_maxFuel, _fuelReserve + value);
-        UpdateFuel();
+        if (_timeWithoutCharging >= _fuelDelay)
+        {
+            _fuelReserve = Mathf.Min(_maxFuel, _fuelReserve + value);
+            UpdateFuel();
+            _timeWithoutCharging = 0;
+        }
     }
 }
