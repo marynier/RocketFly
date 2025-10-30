@@ -22,13 +22,7 @@ public class ScoreManager : MonoBehaviour
     private void Update()
     {
         UpdateScore();
-    }
-    public void EndGame()
-    {
-
-        UpdateScore();
-        _loseWindow.SetActive(true);
-    }
+    }    
     private void UpdateText()
     {
         _scoreText.text = Formater.Format(_score);

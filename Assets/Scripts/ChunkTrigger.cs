@@ -4,28 +4,28 @@ public class ChunkTrigger : MonoBehaviour
 {
     public Transform respawnPoint; // точка респавна в сегменте
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.GetComponent<PlayerRespawn>())
+        if (other.GetComponent<PlayerMove>())
         {
-            PlayerRespawn playerRespawn = other.GetComponent<PlayerRespawn>();
-            if (playerRespawn != null)
+            PlayerMove player = other.GetComponent<PlayerMove>();
+            if (player != null)
             {
-                playerRespawn.CurrentChunk = this;
+                player.CurrentChunk = this;
             }
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if ( other.GetComponent<PlayerRespawn>() )
+        if ( other.GetComponent<PlayerMove>() )
         {
-            PlayerRespawn playerRespawn = other.GetComponent<PlayerRespawn>();
+            PlayerMove player = other.GetComponent<PlayerMove>();
 
-            if (playerRespawn != null && playerRespawn.CurrentChunk == this)
+            if (player != null && player.CurrentChunk == this)
             {
-                playerRespawn.CurrentChunk = null;
+                player.CurrentChunk = null;
             }
         }
-    }
+    }    
 }

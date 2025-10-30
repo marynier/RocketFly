@@ -23,7 +23,7 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private ScoreManager _scoreManager;
     [SerializeField] private int _fuelConsumption = 5; //Расход топлива
-    [SerializeField] private FuelManager _fuelCharge;
+    [SerializeField] private FuelManager _fuelManager;
 
 
     [SerializeField] private Projection _projection;
@@ -31,7 +31,10 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private SpriteRenderer _explosion;
     [SerializeField] private SpriteRenderer[] _playerVisual;
-    
+    [SerializeField] private GameManager _gameManager;
+
+    public ChunkTrigger CurrentChunk { get; set; }
+
 
     void Start()
     {
@@ -104,14 +107,20 @@ public class PlayerMove : MonoBehaviour
     }
     bool IsMouseOverRocket()
     {
-        Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-        return hit.collider != null && hit.collider.gameObject == gameObject;
+        //Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+        //RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+        //return hit.collider != null && hit.collider.gameObject == gameObject;
+        Vector2 mouseWorldPos = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Collider2D col = GetComponent<Collider2D>();
+        if (col == null) return false;
+        return col.OverlapPoint(mouseWorldPos);
+
+
     }
 
     void StartAiming()
     {
-        if (_fuelCharge._fuelReserve < _fuelConsumption) return;
+        if (_fuelManager._fuelReserve < _fuelConsumption) return;
 
         _startMousePos = GetMouseWorldPos();
         _isAiming = true;
@@ -138,6 +147,7 @@ public class PlayerMove : MonoBehaviour
 
 
         _projection.gameObject.SetActive(true);
+        _playerVisual[1].enabled = false;
         //_projection.ResetAndLaunch(transform.position, _launchVelocity);
     }
 
@@ -157,8 +167,9 @@ public class PlayerMove : MonoBehaviour
         _isAiming = false;
         _isLaunched = true;
         TrajectoryLine.enabled = false;
-        _fuelCharge.FuelBurst(_fuelConsumption);
+        _fuelManager.FuelBurst(_fuelConsumption);
         _projection.gameObject.SetActive(false);
+        _playerVisual[1].enabled = true;
     }
 
     void RotateTowardsAimDirection()
@@ -226,25 +237,44 @@ public class PlayerMove : MonoBehaviour
         mousePos.z = -_mainCamera.transform.position.z;
         return _mainCamera.ScreenToWorldPoint(mousePos);
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.GetComponent<FuelCharger>()) return;
+        //if (collision.GetComponent<FuelCharger>()) return;
+        EndGame();
 
+    }
+    private void EndGame()
+    {
+        _gameManager.EndGame();
         _explosion.enabled = true;
 
         foreach (var image in _playerVisual)
-        image.enabled = false;
-
-        _rb.linearVelocity = Vector2.zero;
-        _rb.bodyType = RigidbodyType2D.Static;
-
+            image.enabled = false;
         
-        Invoke(nameof(Die), 0.3f);
+        _rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+        //_rb.bodyType = RigidbodyType2D.Static;
+
+        //Invoke(nameof(Die), 0.3f);
     }
     private void Die()
     {
-        _scoreManager.EndGame();
         Destroy(gameObject);
     }
-
+    public void Respawn()
+    {
+        if (CurrentChunk != null && CurrentChunk.respawnPoint != null)
+        {
+            transform.position = CurrentChunk.respawnPoint.position;
+            _rb.constraints = RigidbodyConstraints2D.None;
+            foreach (var image in _playerVisual)
+                image.enabled = true;
+            _explosion.enabled = false;
+            AutoLaunch();
+            _fuelManager.FuelCharging(10);
+        }
+        else
+        {
+            // респавн в дефолтной точке или начало уровня
+        }
+    }
 }

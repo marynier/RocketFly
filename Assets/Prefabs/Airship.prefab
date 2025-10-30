@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4279005515645599126}
   - component: {fileID: 5155608005224840401}
-  - component: {fileID: 341069525047483059}
+  - component: {fileID: 4165888782524155201}
   m_Layer: 0
   m_Name: Airship
   m_TagString: Untagged
@@ -87,8 +87,8 @@ MonoBehaviour:
   _leftEuler: {x: 0, y: -180}
   _rightEuler: {x: 0, y: 0}
   _rotationSpeed: 8
---- !u!60 &341069525047483059
-PolygonCollider2D:
+--- !u!61 &4165888782524155201
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -117,11 +117,11 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.45281053, y: 0.34651697}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -131,23 +131,8 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 1.175375, y: 0.44135284}
-      - {x: 0.9716463, y: 0.9175594}
-      - {x: 1.4340391, y: 1.0622039}
-      - {x: 1.579503, y: 1.2446544}
-      - {x: 1.1925673, y: 1.5623205}
-      - {x: 0.734642, y: 1.5409873}
-      - {x: 0.34738302, y: 1.1710773}
-      - {x: 0.17374372, y: 0.88230276}
-      - {x: -0.47045016, y: 0.65380096}
-      - {x: -0.88940555, y: 0.17450574}
-      - {x: -0.5709712, y: -0.49515808}
-      - {x: 0.28513587, y: -0.5904367}
-      - {x: 1.3862576, y: -0.35834074}
-      - {x: 1.365799, y: 0.090436876}
-  m_UseDelaunayMesh: 0
+  m_Size: {x: 1.905621, y: 1.6675231}
+  m_EdgeRadius: 0
 --- !u!1 &5900880000574156097
 GameObject:
   m_ObjectHideFlags: 0
