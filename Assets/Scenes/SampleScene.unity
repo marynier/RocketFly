@@ -4785,7 +4785,7 @@ MonoBehaviour:
   _mainCamera: {fileID: 519420031}
   _scoreManager: {fileID: 838564108}
   _fuelConsumption: 5
-  _fuelManager: {fileID: 0}
+  _fuelManager: {fileID: 1490996057}
   _projection: {fileID: 1020696473}
   _explosion: {fileID: 484108323}
   _playerVisual:
