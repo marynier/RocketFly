@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 8373135119695879330}
   - component: {fileID: 4324193260534182607}
   - component: {fileID: 5533437275838121429}
+  - component: {fileID: 794064436803358912}
   m_Layer: 9
   m_Name: Crat_0
   m_TagString: Untagged
@@ -139,3 +140,57 @@ MonoBehaviour:
   _spawns:
   - {fileID: 2830042229257371513}
   _creationDelay: 3
+--- !u!68 &794064436803358912
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6365483420006017123}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -7.155756, y: -1.6743374}
+  - {x: -7.0485935, y: -2.08317}
+  - {x: -6.1573753, y: -3.3955545}
+  - {x: 0.50693893, y: -6.4032145}
+  - {x: 2.217535, y: -5.1512737}
+  - {x: 6.8528976, y: -0.36048603}
+  - {x: 6.9763317, y: 5.3870087}
+  - {x: -0.32003975, y: 6.354745}
+  - {x: -5.066658, y: 4.967373}
+  - {x: -5.705391, y: 2.746995}
+  - {x: -5.2777824, y: 0.10935116}
+  - {x: -6.671425, y: -0.3301735}
+  - {x: -7.1673594, y: -1.6991949}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0

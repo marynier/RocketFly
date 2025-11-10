@@ -1,17 +1,17 @@
-using System.Collections.Generic;
+п»їusing System.Collections.Generic;
 using UnityEngine;
 
 public class ChunkCreator : MonoBehaviour
 {
-    private const float _playerDistToSpawn = 50f; // радиус “достройки”
-    private const int _prewarmChunks = 6;         // стартовый запас
-    private const int _maxActiveChunks = 12;      // лимит активных
+    private const float _playerDistToSpawn = 50f; // СЂР°РґРёСѓСЃ вЂњРґРѕСЃС‚СЂРѕР№РєРёвЂќ
+    private const int _prewarmChunks = 6;         // СЃС‚Р°СЂС‚РѕРІС‹Р№ Р·Р°РїР°СЃ
+    private const int _maxActiveChunks = 12;      // Р»РёРјРёС‚ Р°РєС‚РёРІРЅС‹С…
 
-    [SerializeField] private Transform _player;            // игрок/камерный риг
-    [SerializeField] private Transform _startChunk;        // первый чанк в сцене
-    [SerializeField] private List<Transform> _chunkPool;   // варианты чанков (prefab)
-    [SerializeField] private int _firstSegmentCount = 10;
-    [SerializeField] private int _secondSegmentCount = 20;
+    [SerializeField] private Transform _player;            // РёРіСЂРѕРє/РєР°РјРµСЂРЅС‹Р№ СЂРёРі
+    [SerializeField] private Transform _startChunk;        // РїРµСЂРІС‹Р№ С‡Р°РЅРє РІ СЃС†РµРЅРµ
+    [SerializeField] private List<Transform> _chunkPool;   // РІР°СЂРёР°РЅС‚С‹ С‡Р°РЅРєРѕРІ (prefab)
+    [SerializeField] private int _firstSegmentCount = 6;
+    [SerializeField] private int _secondSegmentCount = 12;
     private readonly Queue<Transform> _active = new();
     private Vector3 _lastEndPos;
     private int _createdChunkCount = 1;
@@ -29,12 +29,12 @@ public class ChunkCreator : MonoBehaviour
     {
         if (_player)
         {
-            // Достроить вперёд
+            // Р”РѕСЃС‚СЂРѕРёС‚СЊ РІРїРµСЂС‘Рґ
             if (Vector3.Distance(_player.position, _lastEndPos) < _playerDistToSpawn)
                 SpawnNext();
         }
 
-        // Удалить/вернуть в пул лишние позади
+        // РЈРґР°Р»РёС‚СЊ/РІРµСЂРЅСѓС‚СЊ РІ РїСѓР» Р»РёС€РЅРёРµ РїРѕР·Р°РґРё
         while (_active.Count > _maxActiveChunks)
             DespawnOldest();
     }
@@ -44,15 +44,15 @@ public class ChunkCreator : MonoBehaviour
         int chunkIndex;
         if (_createdChunkCount < _firstSegmentCount)
         {
-            chunkIndex = Random.Range(0, 0);
+            chunkIndex = Random.Range(0, 1);
         }
         else if (_createdChunkCount > _firstSegmentCount && _createdChunkCount < _secondSegmentCount)
         {
-            chunkIndex = Random.Range(0, 1);
+            chunkIndex = Random.Range(0, 2);
         }
         else
         {
-            chunkIndex = Random.Range(0, _chunkPool.Count);
+            chunkIndex = Random.Range(3, _chunkPool.Count);
         }
         //var prefab = _chunkPool[Random.Range(0, _chunkPool.Count)];
         var prefab = _chunkPool[chunkIndex];
@@ -66,6 +66,6 @@ public class ChunkCreator : MonoBehaviour
     {
         var oldest = _active.Dequeue();
         if (oldest == null) return;
-        Destroy(oldest.gameObject); // замените на ReturnToPool для pooling
+        Destroy(oldest.gameObject); // Р·Р°РјРµРЅРёС‚Рµ РЅР° ReturnToPool РґР»СЏ pooling
     }
 }
