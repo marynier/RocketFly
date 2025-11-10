@@ -1,10 +1,11 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
     [SerializeField] private Vector2 _velocity = new Vector2(0, 10f);
     [SerializeField] private float _maxRotationSpeed;    
     [SerializeField] private Rigidbody2D _rigidbody;
+    [SerializeField] private SpriteRenderer _explosion;
 
     void Start()
     {
@@ -23,7 +24,9 @@ public class Bomb : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Invoke(nameof(Die), 0);
+        _explosion.enabled = true;
+        _rigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+        Invoke(nameof(Die), 0.2f);
     }
     private void Die()
     {
